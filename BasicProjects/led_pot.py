@@ -1,12 +1,18 @@
 from machine import Pin, ADC, PWM
-import time
+from time import sleep
 
-pot = ADC(Pin(33))
+led = PWM(Pin(26), freq=1000)   
 
-led = PWM(Pin(14), freq=1000)
+pot = ADC(Pin(34))
+pot.atten(ADC.ATTN_11DB)        
+pot.width(ADC.WIDTH_12BIT)     
 
 while True:
-    val = pot.read()          
-    duty = int(val / 4)       
+    value = pot.read()          
+    
+
+    duty = int((value / 4095) * 1023)
     led.duty(duty)
-    time.sleep(0.5)
+    
+    print("ADC:", value, "Duty:", duty)
+    sleep(0.05)
